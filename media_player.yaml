@@ -1,0 +1,4 @@
+  - platform: bluetooth_speaker
+    address: 00:2F:AD:12:0D:42
+    volume: 0.65
+#    cache_dir: /tmp/tts    # Optional - make sure it matches the same setting in TTS config
