@@ -12,7 +12,6 @@ import voluptuous as vol
 
 import homeassistant.helpers.config_validation as cv
 from homeassistant.core import callback
-from homeassistant.config import load_yaml_config_file
 from homeassistant.helpers.event import track_point_in_utc_time
 from homeassistant.const import STATE_OFF, STATE_STANDBY, STATE_ON
 from homeassistant.components.device_tracker import (
@@ -88,16 +87,11 @@ def setup_scanner(hass, config, see, discovery_info=None):
         _LOGGER.debug("Bluetooth devices discovered = " + str(len(result)))
         return result
 
-    descriptions = load_yaml_config_file(
-        os.path.join(os.path.dirname(__file__), 'services.yaml'))
+    hass.services.register(
+        DOMAIN, BLUETOOTH_TRACKER_SERVICE_TURN_ON, turn_on, schema=BLUETOOTH_TRACKER_SERVICE_SCHEMA)
 
     hass.services.register(
-        DOMAIN, BLUETOOTH_TRACKER_SERVICE_TURN_ON, turn_on,
-        descriptions.get(BLUETOOTH_TRACKER_SERVICE_TURN_ON), schema=BLUETOOTH_TRACKER_SERVICE_SCHEMA)
-
-    hass.services.register(
-        DOMAIN, BLUETOOTH_TRACKER_SERVICE_TURN_OFF, turn_off,
-        descriptions.get(BLUETOOTH_TRACKER_SERVICE_TURN_OFF), schema=BLUETOOTH_TRACKER_SERVICE_SCHEMA)
+        DOMAIN, BLUETOOTH_TRACKER_SERVICE_TURN_OFF, turn_off, schema=BLUETOOTH_TRACKER_SERVICE_SCHEMA)
 
     # Ensure the Bluetooth tracker is on
     turn_on(None)
