@@ -80,6 +80,12 @@ connect 00:2F:AD:12:0D:42
 EOF
 ```
 
+Make sure to grant execute permissions for the script.
+
+```
+chmod a+x [PATH_TO_YOUR_HOME_ASSSISTANT]/scripts/pair_bluetooth.sh
+```
+
 In `/etc/rc.local`, add the following to the end of the file to run the script at startup:
 
 ```
