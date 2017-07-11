@@ -27,7 +27,7 @@ sudo apt-get install pulseaudio pulseaudio-module-bluetooth bluez mplayer
 
 ### 2) Add HA user to 'pulse-access' group
 
-The example assume that HA runs under the 'pi' account, so make sure you add the appropriate user in your case.
+The example assumes that HA runs under the 'pi' account, so make sure you add the appropriate user in your case.
 
 ```
 sudo adduser pi pulse-access
