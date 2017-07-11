@@ -60,11 +60,16 @@ def setup_scanner(hass, config, see, discovery_info=None):
         _LOGGER.info("Turning off Bluetooth")
         hass.states.set(DOMAIN + '.' + ENTITY_ID, STATE_OFF)
 
-        command = 'echo -e "power off\nquit" | bluetoothctl'
-        subprocess.call(command, shell=True)
+        try:
+            sock = bluez.hci_open_dev(0)
+            bluez.hci_send_cmd(sock, bluez.OGF_LINK_CTL, bluez.OCF_INQUIRY_CANCEL)
+            sock.close()
+        except:
+            sock.close()
 
-        command = 'echo -e "power on\nquit" | bluetoothctl'
-        subprocess.call(command, shell=True)
+        sock = bluez.hci_open_dev(0)
+        bluez.hci_send_cmd(sock, bluez.OGF_LINK_CTL, bluez.OCF_INQUIRY_CANCEL)
+        sock.close()
 
     def see_device(device):
         """Mark a device as seen."""
@@ -93,6 +98,9 @@ def setup_scanner(hass, config, see, discovery_info=None):
     hass.services.register(
         DOMAIN, BLUETOOTH_TRACKER_SERVICE_TURN_OFF, turn_off,
         descriptions.get(BLUETOOTH_TRACKER_SERVICE_TURN_OFF), schema=BLUETOOTH_TRACKER_SERVICE_SCHEMA)
+
+    # Ensure the Bluetooth tracker is on
+    turn_on(None)
 
     yaml_path = hass.config.path(YAML_DEVICES)
     devs_to_track = []
@@ -129,7 +137,6 @@ def setup_scanner(hass, config, see, discovery_info=None):
                        dev[0] not in devs_donot_track:
                         devs_to_track.append(dev[0])
             for mac in devs_to_track:
-                _LOGGER.debug('update - Checking state: ' + str(hass.states.get(DOMAIN + '.' + ENTITY_ID).state))
                 if hass.states.get(DOMAIN + '.' + ENTITY_ID).state != STATE_ON:
                     continue
 
