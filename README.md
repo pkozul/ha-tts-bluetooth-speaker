@@ -69,12 +69,12 @@ sudo systemctl enable pulseaudio.service
 ### 5) Add the TTS Bluetooth Speaker to HA
 
 Copy the TTS Bluetooth Speaker component (from this GitHub repo)
-**custom_components/media_player/tts_bluetooth_speaker.py** and save it to the`/home/pi/.homeassistant/custom_components/media_player/` directory.
+**custom_components/media_player/tts_bluetooth_speaker.py** and save it to your Home Assistant config directory.
 
 ### 6) Add the (new) Bluetooth Tracker to HA
 
 Copy the Bluetooth Tracker component (from this GitHub repo)
-**custom_components/device_tracker/bluetooth_tracker.py** and save it to the `/home/pi/.homeassistant/custom_components/device_tracker/` directory.
+**custom_components/device_tracker/bluetooth_tracker.py** and save it to your Home Assistant config directory.
 
 ### 7) Create a script to pair the Bluetooth speaker at startup
 
