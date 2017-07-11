@@ -22,7 +22,7 @@ import logging
 import os
 import re
 
-DEFAULT_NAME = 'Bluetooth Speaker'
+DEFAULT_NAME = 'TTS Bluetooth Speaker'
 DEFAULT_VOLUME = 0.5
 DEFAULT_CACHE_DIR = "tts"
 
