@@ -123,7 +123,11 @@ media_player:
 #    cache_dir: /tmp/tts    # Optional - make sure it matches the same setting in TTS config
 ```
 
-Below is a simple automation to test out the TTS Bluetooth speaker component:
+To test that it's all working, you can use **Developer Tools > Services** in the HA frontend to play a TTS message through your Bluetooth speaker:
+
+![image](https://user-images.githubusercontent.com/2073827/28092870-4cae28b4-66d8-11e7-8dd5-ab07c73018da.png)
+
+Another way to test it is to add an automation that plays a TTS message whenever HA is started:
 
 ```
 automation: 
