@@ -73,9 +73,6 @@ class BluetoothSpeakerDevice(MediaPlayerDevice):
         self._volume = volume
         self._cache_dir = self.get_tts_cache_dir(cache_dir)
 
-        with open("/tmp/petar.txt", "a") as text_file:
-            print("Init: " + self._cache_dir, file=text_file)
-
     def get_tts_cache_dir(self, cache_dir):
         """Get cache folder."""
         if not os.path.isabs(cache_dir):
