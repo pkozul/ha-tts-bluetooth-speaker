@@ -116,7 +116,7 @@ media_player:
 #    cache_dir: /tmp/tts    # Optional - make sure it matches the same setting in TTS config
 ```
 
-I then added a simple automation to test it out:
+Below is a simple automation to test out the TTS Bluetooth speaker component:
 
 ```
 automation: 
