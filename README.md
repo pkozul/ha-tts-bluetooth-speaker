@@ -99,11 +99,10 @@ custom_components/media_player/tts_bluetooth_speaker.py
 
 ### 7) Add the (new) Bluetooth Tracker to HA
 
-Copy the Bluetooth Tracker component (and services file) and save it to your Home Assistant config directory.
+Copy the Bluetooth Tracker component and save it to your Home Assistant config directory.
 
 ```
 custom_components/device_tracker/bluetooth_tracker.py
-custom_components/device_tracker/services.yaml
 ```
 
 ### 8) Start using it in HA
