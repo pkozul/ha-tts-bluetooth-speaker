@@ -1,9 +1,8 @@
 # TTS Bluetooth Speaker for Home Assistant
 
-This project provides the following custom components for Home Assistant, and allows them to place nicely together:
+This project provides a media player component for Home Assistant that plays TTS (text-to-speech) via a Bluetooth speaker.
 
-- Bluetooth tracker (presence detection)
-- Bluetooth speaker (for TTS)
+If you're using HA's Bluetooth device tracker (for presence detection), this project also provides a replacement Bluetooth tracker that allows both components to play nciely together.
 
 Since the Bluetooth tracker constantly scans for devices, playback of audio on the Bluetooth speaker may be disrupted / become choppy while scanning. These custom components work together to ensure only one of them is accessing Bluetooth at any givem time.
 
@@ -103,7 +102,9 @@ Copy the TTS Bluetooth Speaker component (from this GitHub repo) and save it to 
 custom_components/media_player/tts_bluetooth_speaker.py
 ```
 
-### 7) Add the (new) Bluetooth Tracker to HA
+### 7) Optional - Add the (new) Bluetooth Tracker to HA
+
+This step only applies if you're using the Bluetooth tracker.
 
 Copy the Bluetooth Tracker component and save it to your Home Assistant config directory.
 
@@ -115,17 +116,21 @@ custom_components/device_tracker/bluetooth_tracker.py
 
 By this stage (after a reboot), you should be able to start using the TTS Bluetooth speaker in HA.
 
-Below is an example of how these components are configured. You need to specify the Bluetooth address of your speaker, and optionally set the volume level (must be between 0 and 1). If you've change your TTS cache directory (in your TTS config), then you should set the `cache_dir:` here to match.
+Below is an example of how the component is configured. You need to specify the Bluetooth address of your speaker, and optionally set the volume level (must be between 0 and 1). If you've change your TTS cache directory (in your TTS config), then you should set the `cache_dir:` here to match.
 
 ```
-device_tracker:
-  - platform: bluetooth_tracker
-
 media_player:
   - platform: tts_bluetooth_speaker
     address: 00:2F:AD:12:0D:42
     volume: 0.45
 #    cache_dir: /tmp/tts    # Optional - make sure it matches the same setting in TTS config
+```
+
+If you're using the Bluetooth tracker, you probably already have this in your config:
+
+```
+device_tracker:
+  - platform: bluetooth_tracker
 ```
 
 To test that it's all working, you can use **Developer Tools > Services** in the HA frontend to play a TTS message through your Bluetooth speaker:
