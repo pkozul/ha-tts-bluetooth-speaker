@@ -121,9 +121,9 @@ Below is an example of how the component is configured. You need to specify the 
 ```
 media_player:
   - platform: tts_bluetooth_speaker
-    address: 00:2F:AD:12:0D:42
-    volume: 0.45
-#    cache_dir: /tmp/tts    # Optional - make sure it matches the same setting in TTS config
+    address: [BLUETOOTH_ADDRESS]   # Required - for example, 00:2F:AD:12:0D:42
+    volume: 0.45                   # Optional - default is 0.5
+#    cache_dir: /tmp/tts           # Optional - make sure it matches the same setting in TTS config
 ```
 
 If you're using the Bluetooth tracker, you probably already have this in your config:
