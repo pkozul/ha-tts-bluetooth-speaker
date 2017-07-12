@@ -11,7 +11,7 @@ The flow is something like this:
 - Bluetooth tracker component continually scans for devices (presence detection)
 - TTS service gets called to play something on the Bluetooth speaker
 - TTS Bluetooth speaker component disables Bluetooth tracker component
-- TTS Bluetooth speaker terminates any running Bluetooth scans
+- Bluetooth tracker component terminates any running Bluetooth scans
 - TTS Bluetooth speaker component plays the TTS MP3 file
 - TTS Bluetooth speaker component enables Bluetooth tracker component
 - Bluetooth tracker component continues scanning for devices (presence detection)
