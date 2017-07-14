@@ -13,14 +13,17 @@ from homeassistant.const import (
     CONF_NAME, STATE_OFF, STATE_PLAYING)
 import homeassistant.helpers.config_validation as cv
 
-from ..device_tracker import bluetooth_tracker
-
+try:
+   from ..device_tracker import bluetooth_tracker
+except ImportError:
+   pass
 import subprocess
 
 import logging
 
 import os
 import re
+import sys
 
 DEFAULT_NAME = 'TTS Bluetooth Speaker'
 DEFAULT_VOLUME = 0.5
@@ -68,6 +71,7 @@ class BluetoothSpeakerDevice(MediaPlayerDevice):
         self._current = None
         self._address = address
         self._volume = volume
+        self._tracker = 'bluetooth_tracker' in sys.modules
         self._cache_dir = self.get_tts_cache_dir(cache_dir)
 
     def get_tts_cache_dir(self, cache_dir):
@@ -117,7 +121,8 @@ class BluetoothSpeakerDevice(MediaPlayerDevice):
         _LOGGER.info('play_media: %s', media_id)
         self._is_standby = False
 
-        self._hass.services.call(bluetooth_tracker.DOMAIN, bluetooth_tracker.BLUETOOTH_TRACKER_SERVICE_TURN_OFF, None)
+        if self._tracker:
+            self._hass.services.call(bluetooth_tracker.DOMAIN, bluetooth_tracker.BLUETOOTH_TRACKER_SERVICE_TURN_OFF, None)
 
         sink = 'pulse::bluez_sink.' + re.sub(':', '_', self._address)
         volume = str(self._volume * 100)
@@ -127,6 +132,7 @@ class BluetoothSpeakerDevice(MediaPlayerDevice):
         _LOGGER.debug('Executing command: %s', command)
         subprocess.call(command, shell=True)
 
-        self._hass.services.call(bluetooth_tracker.DOMAIN, bluetooth_tracker.BLUETOOTH_TRACKER_SERVICE_TURN_ON, None)
+        if self._tracker:
+            self._hass.services.call(bluetooth_tracker.DOMAIN, bluetooth_tracker.BLUETOOTH_TRACKER_SERVICE_TURN_ON, None)
 
         self._is_standby = True
