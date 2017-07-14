@@ -26,12 +26,6 @@ DEFAULT_NAME = 'TTS Bluetooth Speaker'
 DEFAULT_VOLUME = 0.5
 DEFAULT_CACHE_DIR = "tts"
 
-# This is the path where the script is located
-SCRIPT_DIR = '/home/pi/.homeassistant/scripts/'
-
-# This is the name of the script
-SCRIPT_NAME = SCRIPT_DIR + 'play_url_bluetooth.sh'
-
 SUPPORT_BLU_SPEAKER = SUPPORT_PLAY_MEDIA | SUPPORT_VOLUME_SET
 
 CONF_ADDRESS = 'address'
