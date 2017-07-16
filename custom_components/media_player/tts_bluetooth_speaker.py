@@ -144,11 +144,11 @@ class BluetoothSpeakerDevice(MediaPlayerDevice):
         if (self._pre_silence_duration > 0) or (self._post_silence_duration > 0):
             media_file_to_play = "/tmp/tts_{}".format(os.path.basename(media_file))
 
-            command = "sox -c 1 -r 24000 -n {} synth 1 brownnoise gain -50".format(pre_silence_file)
+            command = "sox -c 1 -r 24000 -n {} synth {} brownnoise gain -50".format(pre_silence_file, self._pre_silence_duration)
             _LOGGER.debug('Executing command: %s', command)
             subprocess.call(command, shell=True)
 
-            command = "sox -c 1 -r 24000 -n {} synth 1 brownnoise gain -50".format(post_silence_file)
+            command = "sox -c 1 -r 24000 -n {} synth {} brownnoise gain -50".format(post_silence_file, self._post_silence_duration)
             _LOGGER.debug('Executing command: %s', command)
             subprocess.call(command, shell=True)
 
