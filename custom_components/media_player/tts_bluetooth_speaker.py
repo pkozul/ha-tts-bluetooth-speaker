@@ -137,11 +137,22 @@ class BluetoothSpeakerDevice(MediaPlayerDevice):
         sink = 'pulse::bluez_sink.' + re.sub(':', '_', self._address)
         volume = str(self._volume * 100)
 
+        pre_silence_file = "/tmp/pre_silence.mp3"
+        post_silence_file = "/tmp/post_silence.mp3"
         media_file_to_play = media_file
 
         if (self._pre_silence_duration > 0) or (self._post_silence_duration > 0):
             media_file_to_play = "/tmp/tts_{}".format(os.path.basename(media_file))
-            command = "sox {} {} pad {} {}".format(media_file, media_file_to_play, self._pre_silence_duration, self._post_silence_duration)
+
+            command = "sox -c 1 -r 24000 -n {} synth 1 brownnoise gain -50".format(pre_silence_file)
+            _LOGGER.debug('Executing command: %s', command)
+            subprocess.call(command, shell=True)
+
+            command = "sox -c 1 -r 24000 -n {} synth 1 brownnoise gain -50".format(post_silence_file)
+            _LOGGER.debug('Executing command: %s', command)
+            subprocess.call(command, shell=True)
+
+            command = "sox {} {} {} {}".format(pre_silence_file, media_file, post_silence_file, media_file_to_play)
             _LOGGER.debug('Executing command: %s', command)
             subprocess.call(command, shell=True)
 
@@ -153,7 +164,7 @@ class BluetoothSpeakerDevice(MediaPlayerDevice):
         subprocess.call(command, shell=True)
 
         if (self._pre_silence_duration > 0) or (self._post_silence_duration > 0):
-            command = "rm {}".format(media_file_to_play);
+            command = "rm {} {} {}".format(pre_silence_file, media_file_to_play, post_silence_file);
             _LOGGER.debug('Executing command: %s', command)
             subprocess.call(command, shell=True)
 
