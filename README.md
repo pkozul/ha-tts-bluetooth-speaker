@@ -18,10 +18,10 @@ The flow is something like this:
 
 ## Getting Started
 
-### 1) Install Pulse Audio (with Bluetooth support) and MPlayer
+### 1) Install Pulse Audio (with Bluetooth support), MPlayer and SoX (with MP3 support)
 
 ```
-sudo apt-get install pulseaudio pulseaudio-module-bluetooth bluez mplayer
+sudo apt-get install pulseaudio pulseaudio-module-bluetooth bluez mplayer sox libsox-fmt-mp3
 ```
 
 ### 2) Add HA user to 'pulse-access' group
@@ -116,13 +116,15 @@ custom_components/device_tracker/bluetooth_tracker.py
 
 By this stage (after a reboot), you should be able to start using the TTS Bluetooth speaker in HA.
 
-Below is an example of how the component is configured. You need to specify the Bluetooth address of your speaker, and optionally set the volume level (must be between 0 and 1). If you've change your TTS cache directory (in your TTS config), then you should set the `cache_dir:` here to match.
+Below is an example of how the component is configured. You need to specify the Bluetooth address of your speaker, and optionally set the `volume` level (must be between 0 and 1). If you find your speaker is not playing the first part of the audio (i.e. first second is missing when played back), then you can optionally add some silence before and/or after the original TTS audio hsing the `pre_silence_duration` and `post_silence_duration` options (must be between 0 and 60 seconds). If you've change your TTS cache directory (in your TTS config), then you should set the `cache_dir` here to match.
 
 ```
 media_player:
   - platform: tts_bluetooth_speaker
     address: [BLUETOOTH_ADDRESS]   # Required - for example, 00:2F:AD:12:0D:42
     volume: 0.45                   # Optional - default is 0.5
+#    pre_silence_duration: 1       # Optional - No. of seconds silence before the TTS (default is 0)
+#    post_silence_duration: 0.5    # Optional - No. of seconds silence after the TTS (default is 0)
 #    cache_dir: /tmp/tts           # Optional - make sure it matches the same setting in TTS config
 ```
 
