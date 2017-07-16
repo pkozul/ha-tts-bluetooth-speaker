@@ -43,9 +43,9 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_VOLUME, default=DEFAULT_VOLUME):
         vol.All(vol.Coerce(float), vol.Range(min=0, max=1)),
     vol.Optional(CONF_PRE_SILENCE_DURATION, default=DEFAULT_SILENCE_DURATION):
-        vol.All(vol.Coerce(float), vol.Range(min=0, max=1)),
+        vol.All(vol.Coerce(float), vol.Range(min=0, max=60)),
     vol.Optional(CONF_POST_SILENCE_DURATION, default=DEFAULT_SILENCE_DURATION):
-        vol.All(vol.Coerce(float), vol.Range(min=0, max=1)),
+        vol.All(vol.Coerce(float), vol.Range(min=0, max=60)),
     vol.Optional(CONF_CACHE_DIR, default=DEFAULT_CACHE_DIR): cv.string,
 })
 
