@@ -57,18 +57,18 @@ def setup_scanner(hass, config, see, discovery_info=None):
     def turn_off(call):
         """Turn Bluetooth tracker off."""
         _LOGGER.info("Turning off Bluetooth")
-        hass.states.set(DOMAIN + '.' + ENTITY_ID, STATE_OFF)
 
         try:
             sock = bluez.hci_open_dev(0)
             bluez.hci_send_cmd(sock, bluez.OGF_LINK_CTL, bluez.OCF_INQUIRY_CANCEL)
             sock.close()
-        except:
-            sock.close()
 
-        sock = bluez.hci_open_dev(0)
-        bluez.hci_send_cmd(sock, bluez.OGF_LINK_CTL, bluez.OCF_INQUIRY_CANCEL)
-        sock.close()
+            _LOGGER.info("Turned off Bluetooth")
+            hass.states.set(DOMAIN + '.' + ENTITY_ID, STATE_OFF)
+
+        except Exception as err:
+            _LOGGER.error("Error turning off Bluetooth: %s", err)
+            sock.close()
 
     def see_device(device):
         """Mark a device as seen."""
@@ -93,8 +93,9 @@ def setup_scanner(hass, config, see, discovery_info=None):
     hass.services.register(
         DOMAIN, BLUETOOTH_TRACKER_SERVICE_TURN_OFF, turn_off, schema=BLUETOOTH_TRACKER_SERVICE_SCHEMA)
 
-    # Ensure the Bluetooth tracker is on
-    turn_on(None)
+    # Ensure the Bluetooth tracker is on (if that state has been set)
+    if hass.states.get(DOMAIN + '.' + ENTITY_ID).state == STATE_ON:
+        turn_on(None)
 
     yaml_path = hass.config.path(YAML_DEVICES)
     devs_to_track = []
