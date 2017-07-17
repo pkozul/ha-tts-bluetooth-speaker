@@ -148,6 +148,7 @@ automation:
       platform: homeassistant
       event: start
     action:
+      - delay: '00:00:10'
       - service: tts.google_say
         data:
           entity_id: media_player.tts_bluetooth_speaker
