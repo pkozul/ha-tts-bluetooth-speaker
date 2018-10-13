@@ -29,7 +29,7 @@ sudo apt-get install pulseaudio pulseaudio-module-bluetooth bluez mplayer sox li
 The example assumes that HA runs under the 'pi' account, so make sure you add the appropriate user in your case.
 
 ```
-sudo adduser pi pulse-access
+sudo adduser homeassistant pulse-access
 ```
 
 ### 3) Add Bluetooth discovery to Pulse Audio
@@ -52,6 +52,7 @@ Description=Pulse Audio
 
 [Service]
 Type=simple
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
 ExecStart=/usr/bin/pulseaudio --system --disallow-exit --disable-shm --exit-idle-time=-1
 
 [Install]
@@ -65,9 +66,27 @@ sudo systemctl daemon-reload
 sudo systemctl enable pulseaudio.service
 ```
 
+Give pulse user access to bluetooth interfaces
+
+edit `/etc/dbus-1/system.d/bluetooth.conf`
+
+add the following lines:
+```
+  <policy user="pulse">
+    <allow send_destination="org.bluez"/>
+    <allow send_interface="org.bluez.MediaEndpoint1"/>
+  </policy>
+```
 ### 5) Create a script to pair the Bluetooth speaker at startup
 
-This step assumes you have already trusted and paired your Bluetooth speaker (using `bluetoothctl`). That utility will also display the Bluetooth address for your speaker.
+```
+sudo bluetoothctl
+scan on
+pair 00:2F:AD:12:0D:42
+trust 00:2F:AD:12:0D:42
+connect 00:2F:AD:12:0D:42
+quit
+```
 
 Create the file `[PATH_TO_YOUR_HOME_ASSSISTANT]/scripts/pair_bluetooth.sh` and add the following to it. Make sure to replace the Bluetooth address with that of your Bluetooth speaker.
 
@@ -78,11 +97,10 @@ bluetoothctl << EOF
 connect 00:2F:AD:12:0D:42
 EOF
 ```
-
 Make sure to grant execute permissions for the script.
 
 ```
-chmod a+x [PATH_TO_YOUR_HOME_ASSSISTANT]/scripts/pair_bluetooth.sh
+sudo chmod a+x [PATH_TO_YOUR_HOME_ASSSISTANT]/scripts/pair_bluetooth.sh
 ```
 
 In `/etc/rc.local`, add the following to the end of the file to run the script at startup:
