@@ -92,6 +92,7 @@ add the following lines:
 sudo bluetoothctl
 scan on
 pair 00:2F:AD:12:0D:42
+trust 00:2F:AD:12:0D:42
 connect 00:2F:AD:12:0D:42
 quit
 ```
