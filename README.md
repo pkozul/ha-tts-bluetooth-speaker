@@ -24,11 +24,10 @@ The flow is something like this:
 sudo apt-get install pulseaudio pulseaudio-module-bluetooth bluez mplayer sox libsox-fmt-mp3
 ```
 
-### 2) Add HA user to 'pulse-access' group
-
-The example assumes that HA runs under the 'pi' account, so make sure you add the appropriate user in your case.
+### 2) Add HA and pi user to 'pulse-access' group (pi user for testing, homeassistant for the service)
 
 ```
+sudo adduser pi pulse-access
 sudo adduser homeassistant pulse-access
 ```
 
@@ -41,6 +40,16 @@ In `/etc/pulse/system.pa`, add the following to the bottom of the file:
 .ifexists module-bluetooth-discover.so
 load-module module-bluetooth-discover
 .endif
+
+#set-card-profile bluez_card.00_2F_AD_12_0D_42 a2dp_sink
+```
+
+The last part is to persist the setting for a2dp, in case your bluetooth seems to default to a different profile.  I have commented it out because it seems to be flakey.
+
+You may want to uncomment this line if your audio is getting cut off:
+```
+### Automatically suspend sinks/sources that become idle for too long
+#load-module module-suspend-on-idle
 ```
 
 ### 4) Create a service to run Pulse Audio at startup
@@ -130,7 +139,27 @@ Copy the Bluetooth Tracker component and save it to your Home Assistant config d
 custom_components/device_tracker/bluetooth_tracker.py
 ```
 
-### 8) Start using it in HA
+### 8) Validate audio sink is available
+
+`pactl list sinks`
+
+You should see something like:
+
+```
+Sink #1
+        State: SUSPENDED
+        Name: bluez_sink.00_2F_AD_12_0D_42.a2dp_sink
+```
+
+If it instead says headset_head_unit, you can switch to a2dp profile as follows:
+
+```
+pactl set-card-profile bluez_card.00_2F_AD_12_0D_42 a2dp_sink
+```
+
+Check again and validate it is using a2dp.  For some reason this setting doesn't always stick, but after a few reboots, mine switche dto a2dp and didn't switch back.  It's unclear why.  The 
+
+### 9) Start using it in HA
 
 By this stage (after a reboot), you should be able to start using the TTS Bluetooth speaker in HA.
 
@@ -156,6 +185,8 @@ device_tracker:
 To test that it's all working, you can use **Developer Tools > Services** in the HA frontend to play a TTS message through your Bluetooth speaker:
 
 ![image](https://user-images.githubusercontent.com/2073827/28092870-4cae28b4-66d8-11e7-8dd5-ab07c73018da.png)
+
+{ "entity_id": "media_player.tts_bluetooth_speaker", "message": "Hello" }
 
 Another way to test it is to add an automation that plays a TTS message whenever HA is started:
 
