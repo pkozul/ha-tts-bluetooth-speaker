@@ -156,7 +156,7 @@ If it instead says headset_head_unit, you can switch to a2dp profile as follows:
 pactl set-card-profile bluez_card.00_2F_AD_12_0D_42 a2dp_sink
 ```
 
-Check again and validate it is using a2dp.  For some reason this setting doesn't always stick, but after a few reboots, mine switche dto a2dp and didn't switch back.  It's unclear why.  The 
+Check again and validate it is using a2dp.  For some reason this setting doesn't always stick, but after a few reboots, mine switche dto a2dp and didn't switch back.  It's unclear why.
 
 ### 9) Start using it in HA
 
