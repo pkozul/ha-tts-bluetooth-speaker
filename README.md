@@ -186,7 +186,7 @@ To test that it's all working, you can use **Developer Tools > Services** in the
 
 ![image](https://user-images.githubusercontent.com/2073827/28092870-4cae28b4-66d8-11e7-8dd5-ab07c73018da.png)
 
-{ "entity_id": "media_player.tts_bluetooth_speaker", "message": "Hello" }
+`{ "entity_id": "media_player.tts_bluetooth_speaker", "message": "Hello" }`
 
 Another way to test it is to add an automation that plays a TTS message whenever HA is started:
 
