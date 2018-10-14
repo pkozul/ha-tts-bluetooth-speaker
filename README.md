@@ -158,6 +158,13 @@ pactl set-card-profile bluez_card.00_2F_AD_12_0D_42 a2dp_sink
 
 Check again and validate it is using a2dp.
 
+Test using command line if mplayer can stream to a2dp
+
+```
+mplayer -ao pulse::bluez_sink.00_2F_AD_12_0D_42.a2dp_sink -channels 2 -volume 100 /some/mp3file.mp3
+```
+
+
 ### 9) Start using it in HA
 
 By this stage (after a reboot), you should be able to start using the TTS Bluetooth speaker in HA.
