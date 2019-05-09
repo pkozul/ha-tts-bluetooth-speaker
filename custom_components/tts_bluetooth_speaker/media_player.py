@@ -135,7 +135,7 @@ class BluetoothSpeakerDevice(MediaPlayerDevice):
         self._is_standby = False
 
         media_file = self._cache_dir + '/' + media_id[media_id.rfind('/') + 1:];
-        sink = 'pulse::bluez_sink.' + re.sub(':', '_', self._address)
+        sink = 'pulse::bluez_sink.' + re.sub(':', '_', self._address) + '.a2dp_sink'
         volume = str(self._volume * 100)
 
         pre_silence_file = ""
