@@ -24,12 +24,11 @@ The flow is something like this:
 sudo apt-get install pulseaudio pulseaudio-module-bluetooth bluez mplayer sox libsox-fmt-mp3
 ```
 
-### 2) Add HA user to 'pulse-access' group
-
-The example assumes that HA runs under the 'pi' account, so make sure you add the appropriate user in your case.
+### 2) Add HA and pi user to 'pulse-access' group (pi user for testing, homeassistant for the service)
 
 ```
 sudo adduser pi pulse-access
+sudo adduser homeassistant pulse-access
 ```
 
 ### 3) Add Bluetooth discovery to Pulse Audio
@@ -41,6 +40,16 @@ In `/etc/pulse/system.pa`, add the following to the bottom of the file:
 .ifexists module-bluetooth-discover.so
 load-module module-bluetooth-discover
 .endif
+
+#set-card-profile bluez_card.00_2F_AD_12_0D_42 a2dp_sink
+```
+
+The last part is to persist the setting for a2dp, in case your bluetooth seems to default to a different profile.  I have commented it out because it seems to be flakey.
+
+You may want to uncomment this line if your audio is getting cut off:
+```
+### Automatically suspend sinks/sources that become idle for too long
+#load-module module-suspend-on-idle
 ```
 
 ### 4) Create a service to run Pulse Audio at startup
@@ -52,6 +61,7 @@ Description=Pulse Audio
 
 [Service]
 Type=simple
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/dbus/system_bus_socket
 ExecStart=/usr/bin/pulseaudio --system --disallow-exit --disable-shm --exit-idle-time=-1
 
 [Install]
@@ -65,9 +75,27 @@ sudo systemctl daemon-reload
 sudo systemctl enable pulseaudio.service
 ```
 
+Give pulse user access to bluetooth interfaces
+
+edit `/etc/dbus-1/system.d/bluetooth.conf`
+
+add the following lines:
+```
+  <policy user="pulse">
+    <allow send_destination="org.bluez"/>
+    <allow send_interface="org.bluez.MediaEndpoint1"/>
+  </policy>
+```
 ### 5) Create a script to pair the Bluetooth speaker at startup
 
-This step assumes you have already trusted and paired your Bluetooth speaker (using `bluetoothctl`). That utility will also display the Bluetooth address for your speaker.
+```
+sudo bluetoothctl
+scan on
+pair 00:2F:AD:12:0D:42
+trust 00:2F:AD:12:0D:42
+connect 00:2F:AD:12:0D:42
+quit
+```
 
 Create the file `[PATH_TO_YOUR_HOME_ASSSISTANT]/scripts/pair_bluetooth.sh` and add the following to it. Make sure to replace the Bluetooth address with that of your Bluetooth speaker.
 
@@ -78,11 +106,10 @@ bluetoothctl << EOF
 connect 00:2F:AD:12:0D:42
 EOF
 ```
-
 Make sure to grant execute permissions for the script.
 
 ```
-chmod a+x [PATH_TO_YOUR_HOME_ASSSISTANT]/scripts/pair_bluetooth.sh
+sudo chmod a+x [PATH_TO_YOUR_HOME_ASSSISTANT]/scripts/pair_bluetooth.sh
 ```
 
 In `/etc/rc.local`, add the following to the end of the file to run the script at startup:
@@ -112,7 +139,34 @@ Copy the Bluetooth Tracker component and save it to your Home Assistant config d
 custom_components/device_tracker/bluetooth_tracker.py
 ```
 
-### 8) Start using it in HA
+### 8) Validate audio sink is available
+
+`pactl list sinks`
+
+You should see something like:
+
+```
+Sink #1
+        State: SUSPENDED
+        Name: bluez_sink.00_2F_AD_12_0D_42.a2dp_sink
+```
+
+If it instead says headset_head_unit, you can switch to a2dp profile as follows:
+
+```
+pactl set-card-profile bluez_card.00_2F_AD_12_0D_42 a2dp_sink
+```
+
+Check again and validate it is using a2dp.
+
+Test using command line if mplayer can stream to a2dp
+
+```
+mplayer -ao pulse::bluez_sink.00_2F_AD_12_0D_42.a2dp_sink -channels 2 -volume 100 /some/mp3file.mp3
+```
+
+
+### 9) Start using it in HA
 
 By this stage (after a reboot), you should be able to start using the TTS Bluetooth speaker in HA.
 
@@ -138,6 +192,8 @@ device_tracker:
 To test that it's all working, you can use **Developer Tools > Services** in the HA frontend to play a TTS message through your Bluetooth speaker:
 
 ![image](https://user-images.githubusercontent.com/2073827/28092870-4cae28b4-66d8-11e7-8dd5-ab07c73018da.png)
+
+`{ "entity_id": "media_player.tts_bluetooth_speaker", "message": "Hello" }`
 
 Another way to test it is to add an automation that plays a TTS message whenever HA is started:
 
