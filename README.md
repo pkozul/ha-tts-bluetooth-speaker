@@ -191,9 +191,9 @@ device_tracker:
 
 To test that it's all working, you can use **Developer Tools > Services** in the HA frontend to play a TTS message through your Bluetooth speaker:
 
-![image](https://user-images.githubusercontent.com/8870047/57427914-1f680c80-727a-11e9-8cb3-3775a2e2b527.png)
+![image](https://user-images.githubusercontent.com/8870047/57437834-b773ef00-7296-11e9-891e-9a181ebb6520.png)
 
-`{ "entity_id": "media_player.bt_speaker", "message": "Hello" }`
+`{ "entity_id": "media_player.tts_bluetooth_speaker", "message": "Hello" }`
 
 Another way to test it is to add an automation that plays a TTS message whenever HA is started:
 
@@ -207,6 +207,6 @@ automation:
       - delay: '00:00:10'
       - service: tts.google_translate_say
         data:
-          entity_id: media_player.bt_speaker
+          entity_id: media_player.tts_bluetooth_speaker
           message: 'Home Assistant has started'
 ```
