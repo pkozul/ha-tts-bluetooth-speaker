@@ -2,9 +2,9 @@
 
 This project provides a media player (custom component) for Home Assistant that plays TTS (text-to-speech) via a Bluetooth speaker.
 
-If you're using HA's Bluetooth device tracker (for presence detection), this project also provides a replacement Bluetooth tracker that allows both components to play nciely together.
+If you're using HA's Bluetooth device tracker (for presence detection), this project also provides a replacement Bluetooth tracker that allows both components to play nicely together.
 
-Since the Bluetooth tracker constantly scans for devices, playback of audio on the Bluetooth speaker may be disrupted / become choppy while scanning. These custom components work together to ensure only one of them is accessing Bluetooth at any givem time.
+Since the Bluetooth tracker constantly scans for devices, playback of audio on the Bluetooth speaker may be disrupted / become choppy while scanning. These custom components work together to ensure only one of them is accessing Bluetooth at any given time.
 
 The flow is something like this:
 
@@ -126,7 +126,7 @@ exit 0
 Copy the TTS Bluetooth Speaker component (from this GitHub repo) and save it to your Home Assistant config directory.
 
 ```
-custom_components/media_player/tts_bluetooth_speaker.py
+custom_components/tts_bluetooth_speaker/media_player.py
 ```
 
 ### 7) Optional - Add the (new) Bluetooth Tracker to HA
@@ -136,7 +136,7 @@ This step only applies if you're using the Bluetooth tracker.
 Copy the Bluetooth Tracker component and save it to your Home Assistant config directory.
 
 ```
-custom_components/device_tracker/bluetooth_tracker.py
+custom_components/bluetooth_tracker/device_tracker.py
 ```
 
 ### 8) Validate audio sink is available
@@ -191,9 +191,9 @@ device_tracker:
 
 To test that it's all working, you can use **Developer Tools > Services** in the HA frontend to play a TTS message through your Bluetooth speaker:
 
-![image](https://user-images.githubusercontent.com/2073827/28092870-4cae28b4-66d8-11e7-8dd5-ab07c73018da.png)
+![image](https://user-images.githubusercontent.com/8870047/57427914-1f680c80-727a-11e9-8cb3-3775a2e2b527.png)
 
-`{ "entity_id": "media_player.tts_bluetooth_speaker", "message": "Hello" }`
+`{ "entity_id": "media_player.bt_speaker", "message": "Hello" }`
 
 Another way to test it is to add an automation that plays a TTS message whenever HA is started:
 
@@ -205,8 +205,8 @@ automation:
       event: start
     action:
       - delay: '00:00:10'
-      - service: tts.google_say
+      - service: tts.google_translate_say
         data:
-          entity_id: media_player.tts_bluetooth_speaker
+          entity_id: media_player.bt_speaker
           message: 'Home Assistant has started'
 ```
