@@ -2,7 +2,7 @@
 
 This project provides a media player (custom component) for Home Assistant that plays TTS (text-to-speech) via a Bluetooth speaker.
 
-If you're using HA's Bluetooth device tracker (for presence detection), this project also provides a replacement Bluetooth tracker that allows both components to play nciely together.
+If you're using HA's Bluetooth device tracker (for presence detection), this project also provides a replacement Bluetooth tracker that allows both components to play nicely together.
 
 Since the Bluetooth tracker constantly scans for devices, playback of audio on the Bluetooth speaker may be disrupted / become choppy while scanning. These custom components work together to ensure only one of them is accessing Bluetooth at any given time.
 
