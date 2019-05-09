@@ -1,0 +1,8 @@
+{
+    "domain": "bluetooth_tracker",
+    "name": "BT Tracker",
+    "documentation": "https://github.com/pkozul/ha-tts-bluetooth-speaker",
+    "dependencies": [],
+    "codeowners": ["@pkozul"],
+    "requirements": ["pybluez==0.22"]
+}

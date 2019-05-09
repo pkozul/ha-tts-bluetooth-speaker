@@ -23,8 +23,6 @@ import homeassistant.util.dt as dt_util
 
 _LOGGER = logging.getLogger(__name__)
 
-REQUIREMENTS = ['pybluez==0.22']
-
 BT_PREFIX = 'BT_'
 
 DOMAIN = 'device_tracker'

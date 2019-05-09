@@ -1,0 +1,8 @@
+{
+    "domain": "tts_bluetooth_speaker",
+    "name": "BT Speaker",
+    "documentation": "https://github.com/pkozul/ha-tts-bluetooth-speaker",
+    "dependencies": [],
+    "codeowners": ["@pkozul"],
+    "requirements": []
+}
