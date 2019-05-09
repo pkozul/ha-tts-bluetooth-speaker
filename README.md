@@ -191,7 +191,7 @@ device_tracker:
 
 To test that it's all working, you can use **Developer Tools > Services** in the HA frontend to play a TTS message through your Bluetooth speaker:
 
-![image](https://user-images.githubusercontent.com/8870047/57426448-50910e80-7273-11e9-9980-c3d0ab276ce6.png)
+![image](https://user-images.githubusercontent.com/8870047/57427914-1f680c80-727a-11e9-8cb3-3775a2e2b527.png)
 
 `{ "entity_id": "media_player.bt_speaker", "message": "Hello" }`
 
