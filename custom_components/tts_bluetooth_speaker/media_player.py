@@ -30,6 +30,7 @@ DEFAULT_NAME = 'TTS Bluetooth Speaker'
 DEFAULT_VOLUME = 0.5
 DEFAULT_CACHE_DIR = "tts"
 DEFAULT_SILENCE_DURATION = 0.0
+DEFAULT_ADDRESS = ''
 
 SUPPORT_BLU_SPEAKER = SUPPORT_PLAY_MEDIA | SUPPORT_VOLUME_SET
 
@@ -41,6 +42,7 @@ CONF_POST_SILENCE_DURATION = 'post_silence_duration'
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
+    vol.Optional(CONF_ADDRESS, default=DEFAULT_ADDRESS): cv.string,
     vol.Optional(CONF_VOLUME, default=DEFAULT_VOLUME):
         vol.All(vol.Coerce(float), vol.Range(min=0, max=1)),
     vol.Optional(CONF_PRE_SILENCE_DURATION, default=DEFAULT_SILENCE_DURATION):
